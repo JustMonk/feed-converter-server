@@ -2,6 +2,8 @@ const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
+const RefreshToken = db.refreshToken;
+const crypto = require('crypto');
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -80,7 +82,7 @@ exports.signup = (req, res) => {
 
 exports.signin = (req, res) => {
    User.findOne({
-      username: req.body.username
+      email: req.body.email
    })
       .populate("roles", "-__v")
       .exec((err, user) => {
@@ -114,11 +116,34 @@ exports.signin = (req, res) => {
          for (let i = 0; i < user.roles.length; i++) {
             authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
          }
+
+         //generate or replace token
+         const newRefreshToken = crypto.randomBytes(64).toString('hex');
+         RefreshToken.findOne({
+            userId: user._id
+         }).exec((err, refresh) => {
+            if (refresh) {
+               RefreshToken.deleteOne({
+                  userId: user._id
+               });
+            }
+         });
+         
+         const currentRefresh = new RefreshToken({
+            userId: user._id,
+            refreshToken: newRefreshToken
+         });
+         currentRefresh.save();
+
+         
+
          res.status(200).send({
             id: user._id,
             email: user.email,
             roles: authorities,
-            accessToken: token
+            accessToken: token,
+            accessTokenExpires: new Date(Date.now() + 86400).toISOString(),
+            refreshToken: newRefreshToken
          });
       });
 };
