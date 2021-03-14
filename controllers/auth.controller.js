@@ -140,7 +140,7 @@ exports.signin = (req, res) => {
             email: user.email,
             roles: authorities,
             accessToken: token,
-            accessTokenExpires: new Date(Date.now() + 86400).toISOString(),
+            accessTokenExpires: new Date(Date.now() + 86400 * 1000).toISOString(),
             refreshToken: newRefreshToken
          });
       });

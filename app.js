@@ -82,6 +82,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // routes
 require('./routes/auth.routes')(app);
 require('./routes/user.routes')(app);
+require('./routes/feed.routes')(app);
 
 // simple route
 app.get("/", (req, res) => {
@@ -89,5 +90,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-   console.log(`Example app listening at http://localhost:${port}`)
+   console.log(`App listening at http://localhost:${port}`)
 })
