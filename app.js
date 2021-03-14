@@ -6,17 +6,13 @@ const dbConfig = require("./config/db.config.js");
 const app = express();
 
 var corsOptions = {
-   origin: "http://localhost:8081"
+   origin: "http://localhost:3000"
 };
 /*для прода
 app.use(helmet());
 */
 
 const port = 1337;
-
-var corsOptions = {
-   origin: "http://localhost:8081"
-};
 
 app.use(cors(corsOptions));
 
