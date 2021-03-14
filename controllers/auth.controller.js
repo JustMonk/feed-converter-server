@@ -135,8 +135,6 @@ exports.signin = (req, res) => {
          });
          currentRefresh.save();
 
-         
-
          res.status(200).send({
             id: user._id,
             email: user.email,
