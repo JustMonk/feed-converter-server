@@ -18,7 +18,24 @@ exports.signup = (req, res) => {
          return;
       }
 
-      if (req.body.roles) {
+      Role.findOne({ name: "user" }, (err, role) => {
+         if (err) {
+            res.status(500).send({ message: err });
+            return;
+         }
+
+         user.roles = [role._id];
+         user.save(err => {
+            if (err) {
+               res.status(500).send({ message: err });
+               return;
+            }
+
+            res.send({ message: "User was registered successfully!" });
+         });
+      });
+
+      /*if (req.body.roles) {
          Role.find(
             {
                name: { $in: req.body.roles }
@@ -57,7 +74,7 @@ exports.signup = (req, res) => {
                res.send({ message: "User was registered successfully!" });
             });
          });
-      }
+      }*/
    });
 };
 
@@ -99,7 +116,6 @@ exports.signin = (req, res) => {
          }
          res.status(200).send({
             id: user._id,
-            username: user.username,
             email: user.email,
             roles: authorities,
             accessToken: token
