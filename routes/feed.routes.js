@@ -15,7 +15,7 @@ module.exports = function (app) {
    router.get("/:id", [authJwt.verifyToken], controller.getOne);
    router.post("/", [authJwt.verifyToken], controller.create);
    router.put("/:id", [authJwt.verifyToken], controller.edit);
-   router.delete("/", [authJwt.verifyToken], controller.delete);
+   router.delete("/:id", [authJwt.verifyToken], controller.delete);
 
    app.use('/api/feed', router);
 };

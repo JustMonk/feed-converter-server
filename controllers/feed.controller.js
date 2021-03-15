@@ -2,13 +2,14 @@ const db = require("../models");
 const Feed = db.feed;
 
 exports.getList = (req, res) => {
-   Feed.find({ userId: req.userId }, '-_id -__v' , (err, feeds) => {
+   Feed.find({ userId: req.userId }, '-__v' , (err, feeds) => {
       res.status(200).send(feeds);
    });
 };
 
 exports.getOne = (req, res) => {
-   res.status(200).send("Public Content.");
+   console.log('req.id: %o', req.id);
+   res.status(200).send("feed getOne");
 };
 
 exports.create = (req, res) => {
@@ -38,5 +39,8 @@ exports.edit = (req, res) => {
 };
 
 exports.delete = (req, res) => {
-   res.status(200).send("Public Content.");
+   Feed.deleteOne({ _id: req.params.id }, {}, (err, result) => {
+      console.log('result: %o', result);
+      res.status(200).send({message: 'feed successfully deleted'});
+   });
 };
