@@ -8,8 +8,9 @@ exports.getList = (req, res) => {
 };
 
 exports.getOne = (req, res) => {
-   console.log('req.id: %o', req.id);
-   res.status(200).send("feed getOne");
+   Feed.findOne({ _id: req.params.id }, '-__v, -userId', (err, feed) => {
+      res.status(200).send(feed);
+   });
 };
 
 exports.create = (req, res) => {
